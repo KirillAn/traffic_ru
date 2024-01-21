@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  cv_detector:
+    networks:
+      triton:
+        ipv4_address: 10.211.1.2
+    image: cv_detector:latest
+    container_name: cv-detector-server
+    entrypoint: tritonserver --model-repository=/models
+    ports:
+      - "8003"
+      - "8004"
+      - "8005"
+    build:
+      context: .
+      dockerfile: Dockerfile
+        # runtime: nvidia
+networks:
+  triton:
+    name: "triton"
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.211.1.0/24
+          gateway: 10.211.1.1
+
